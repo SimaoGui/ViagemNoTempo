@@ -69,7 +69,7 @@ export default function Finale({ onCelebrate }) {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: SOFT_EASE }}
         viewport={{ once: true, margin: '-80px' }}
-        className="relative z-10 w-full max-w-md rounded-3xl bg-warm-canvas/95 px-7 py-12 shadow-polaroid backdrop-blur-sm"
+        className="relative z-10 w-full max-w-md rounded-3xl border border-white/40 bg-warm-canvas/40 px-7 py-12 shadow-xl shadow-black/25 ring-1 ring-white/10 backdrop-blur-sm"
       >
         <span className="font-mono text-xs uppercase tracking-meta text-soft-rose">
           e hoje...
