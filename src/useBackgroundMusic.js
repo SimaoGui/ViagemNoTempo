@@ -1,9 +1,9 @@
 import { useCallback, useRef } from 'react'
 
 const MUSIC_SRC = '/photograph.mp3'
-const VOLUME_LOW = 0.15 // som de fundo baixinho
-const VOLUME_HIGH = 0.7 // depois do 1º toque no coração da finale
-const RAMP_SECONDS = 1.8 // tempo da subida suave do volume
+const VOLUME_LOW = 0.25 // som de fundo baixinho (+30% do valor anterior)
+const VOLUME_HIGH = 0.8 // depois do 1º toque no coração da finale (+30%)
+const RAMP_SECONDS = 2.0 // tempo da subida suave do volume
 
 // Gerencia a música de fundo em loop.
 //  - start(): começa a tocar baixinho. Precisa ser chamado dentro de um
@@ -51,8 +51,8 @@ export default function useBackgroundMusic() {
     if (startedRef.current) return
     startedRef.current = true
     const { el, ctx } = getGraph()
-    if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {})
-    el.play().catch(() => {})
+    if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => { })
+    el.play().catch(() => { })
   }, [getGraph])
 
   const boost = useCallback(() => {
@@ -60,8 +60,8 @@ export default function useBackgroundMusic() {
     boostedRef.current = true
     const { el, ctx, gain } = getGraph()
     // garante que esteja tocando (caso o boost venha antes do start)
-    if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {})
-    el.play().catch(() => {})
+    if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => { })
+    el.play().catch(() => { })
 
     if (gain && ctx) {
       // Subida suave do volume — funciona inclusive no iPhone.

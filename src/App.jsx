@@ -1,13 +1,22 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import Hero from './components/Hero'
 import Timeline from './components/Timeline'
 import Finale from './components/Finale'
+import Loading from './components/Loading'
 import useBackgroundMusic from './useBackgroundMusic'
 
 export default function App() {
   const [entered, setEntered] = useState(false)
+  const [loading, setLoading] = useState(true)
   const timelineRef = useRef(null)
   const music = useBackgroundMusic()
+
+  // Tela de loading: visível por 2s na abertura, depois some.
+  useEffect(() => {
+    const t = window.setTimeout(() => setLoading(false), 2000)
+    return () => window.clearTimeout(t)
+  }, [])
 
   // Efeito de chegada na finale: a timeline "congela" ao chegar no fim e o
   // finale sobe POR CIMA dela. Fazemos isso com position: sticky e um `top`
@@ -45,17 +54,21 @@ export default function App() {
   }
 
   return (
-    <main>
-      <Hero entered={entered} onEnter={enter} />
+    <>
+      <AnimatePresence>{loading && <Loading key="loading" />}</AnimatePresence>
 
-      <div className="relative">
-        {/* timeline-pin: congela mostrando a última tela (sticky + top negativo) */}
-        <div ref={timelineRef} className="timeline-pin z-0" style={{ top: `${pinTop}px` }}>
-          <Timeline />
+      <main>
+        <Hero entered={entered} onEnter={enter} />
+
+        <div className="relative">
+          {/* timeline-pin: congela mostrando a última tela (sticky + top negativo) */}
+          <div ref={timelineRef} className="timeline-pin z-0" style={{ top: `${pinTop}px` }}>
+            <Timeline />
+          </div>
+          {/* music.boost sobe o volume — só na 1ª vez (controlado no hook) */}
+          <Finale onCelebrate={music.boost} />
         </div>
-        {/* music.boost sobe o volume — só na 1ª vez (controlado no hook) */}
-        <Finale onCelebrate={music.boost} />
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
