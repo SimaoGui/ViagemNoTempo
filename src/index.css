@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-cream-sand text-charcoal font-sans antialiased;
+    /* Rotações sutis dos polaroids não devem gerar scroll horizontal */
+    overflow-x: hidden;
+  }
+
+  /* Resposta de toque com cara de app nativo no iPhone */
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer utilities {
+  /* Altura de tela cheia que respeita a barra do Safari no iOS */
+  .min-h-dvh {
+    min-height: 100vh; /* fallback */
+    min-height: 100svh;
+  }
+
+  .h-dvh {
+    height: 100vh; /* fallback */
+    height: 100svh;
+  }
+
+  /* Vinheta escura do Hero (foco "foto antiga") */
+  .vignette {
+    background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.8) 100%);
+  }
+
+  /* Sobreposição para texto sobre imagens de tela cheia */
+  .nostalgic-overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0) 60%);
+  }
+
+  /* Fundo "preso" da finale.
+     Recria o parallax do 3dMarketPlace (background-attachment: fixed),
+     mas com position: sticky — que funciona no Safari do iPhone, onde
+     background-attachment: fixed é ignorado. O fundo fica travado na tela
+     enquanto a timeline sai e o card da finale sobe por cima dele. */
+  .finale-sticky-bg {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    height: 100vh; /* fallback */
+    height: 100svh;
+    margin-bottom: -100vh; /* fallback: cancela a altura no fluxo */
+    margin-bottom: -100svh;
+  }
+
+  /* Safe areas do iPhone (notch + home indicator) */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Pulso luminoso dos marcadores de ano da linha do tempo */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(252, 165, 165, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(252, 165, 165, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(252, 165, 165, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.4s ease-out infinite;
+}
+
+/* Acessibilidade: respeitar quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-pulse-glow {
+    animation: none;
+  }
+}
