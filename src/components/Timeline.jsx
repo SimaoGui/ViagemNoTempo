@@ -26,7 +26,7 @@ export default function Timeline() {
         />
         <ol>
           {moments.map((m) => (
-            <TimelineItem key={m.year} moment={m} />
+            <TimelineItem key={m.title} moment={m} />
           ))}
         </ol>
       </div>

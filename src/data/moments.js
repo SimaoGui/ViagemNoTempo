@@ -17,7 +17,6 @@ export const hero = {
 // rotate: rotação sutil alternada (cara de "fotos jogadas na mesa")
 export const moments = [
   {
-    year: '2010',
     title: 'O começo de tudo',
     description:
       'Você era um pacotinho pequenininho — e já era a coisa mais importante da casa inteira.',
@@ -26,7 +25,6 @@ export const moments = [
     rotate: '-rotate-2',
   },
   {
-    year: '2013',
     title: 'Primeiros passos',
     description:
       'Cada tombo, cada risada. Você descobrindo o mundo e a gente descobrindo você.',
@@ -35,7 +33,6 @@ export const moments = [
     rotate: 'rotate-2',
   },
   {
-    year: '2016',
     title: 'Parceiros de crime',
     description:
       'As melhores bagunças da infância foram do nosso lado. Cúmplices em tudo. 🤝',
@@ -44,7 +41,6 @@ export const moments = [
     rotate: '-rotate-1',
   },
   {
-    year: '2019',
     title: 'Crescendo',
     description:
       'Do nada você já tinha opinião sobre tudo, gosto próprio e um sorriso que ilumina.',
@@ -53,7 +49,6 @@ export const moments = [
     rotate: 'rotate-1',
   },
   {
-    year: '2022',
     title: 'Virando gente grande',
     description:
       'Sonhos maiores, conversas mais longas. Continua sendo minha pessoinha favorita.',
@@ -62,7 +57,6 @@ export const moments = [
     rotate: '-rotate-2',
   },
   {
-    year: '2024',
     title: 'Orgulho de irmão',
     description:
       'Olha quem você se tornou. Forte, doce, uma benção na nossa vida. Te amamos muito!',

@@ -5,7 +5,6 @@ const SOFT_EASE = [0.16, 1, 0.3, 1]
 // Card de memória estilo Polaroid — moldura branca, leve rotação,
 // entra com fade + slide suave ao surgir na tela.
 export default function PolaroidCard({
-  year,
   title,
   description,
   image,
@@ -32,10 +31,7 @@ export default function PolaroidCard({
         />
       </div>
       <figcaption className="px-1 pt-4">
-        <span className="font-mono text-xs font-medium uppercase tracking-meta text-soft-rose">
-          {year}
-        </span>
-        <h3 className="mt-1.5 font-sans text-xl font-bold leading-snug text-charcoal">
+        <h3 className="font-sans text-xl font-bold leading-snug text-charcoal">
           {title}
         </h3>
         <p className="mt-2 font-sans text-base leading-relaxed text-muted-earth">

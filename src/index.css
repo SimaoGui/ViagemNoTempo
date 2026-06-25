@@ -10,8 +10,10 @@
 
   body {
     @apply bg-cream-sand text-charcoal font-sans antialiased;
-    /* Rotações sutis dos polaroids não devem gerar scroll horizontal */
-    overflow-x: hidden;
+    /* Rotações sutis dos polaroids não devem gerar scroll horizontal.
+       Usamos `clip` (não `hidden`): `hidden` torna o body um container de
+       scroll e quebra o position: sticky usado no efeito da finale. */
+    overflow-x: clip;
   }
 
   /* Resposta de toque com cara de app nativo no iPhone */
@@ -43,19 +45,14 @@
     background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0) 60%);
   }
 
-  /* Fundo "preso" da finale.
-     Recria o parallax do 3dMarketPlace (background-attachment: fixed),
-     mas com position: sticky — que funciona no Safari do iPhone, onde
-     background-attachment: fixed é ignorado. O fundo fica travado na tela
-     enquanto a timeline sai e o card da finale sobe por cima dele. */
-  .finale-sticky-bg {
+  /* Efeito da finale: a timeline "congela" ao chegar no fim e o finale
+     sobe por cima dela. A timeline gruda na viewport (position: sticky); o
+     valor de `top` (negativo, definido em App.jsx = altura da tela − altura
+     da timeline) faz ela travar mostrando a ÚLTIMA tela. O finale, opaco e
+     acima no z-index, desliza para cima cobrindo a timeline congelada. */
+  .timeline-pin {
     position: -webkit-sticky;
     position: sticky;
-    top: 0;
-    height: 100vh; /* fallback */
-    height: 100svh;
-    margin-bottom: -100vh; /* fallback: cancela a altura no fluxo */
-    margin-bottom: -100svh;
   }
 
   /* Safe areas do iPhone (notch + home indicator) */

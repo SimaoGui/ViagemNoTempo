@@ -21,19 +21,18 @@ function renderMessage(text) {
   )
 }
 
-// Grand Finale: mensagem afetiva + botão coração que dispara
-// corações flutuantes e uma explosão de confete pastel.
+// Grand Finale: foto de fundo em tela cheia + mensagem afetiva + botão
+// coração que dispara corações flutuantes e confete pastel.
 //
-// Efeito de scroll (inspirado no 3dMarketPlace): a foto de fundo da finale
-// fica "presa" na tela (parallax) enquanto a timeline desliza pra cima e o
-// card sobe POR CIMA — dando a sensação de que a finale passa por cima do
-// conteúdo anterior, em vez de um scroll de blocos estáticos.
-export default function Finale() {
+// É uma seção opaca com z-index acima da timeline: quando a timeline
+// congela no fim, este bloco sobe POR CIMA dela (ver App + .timeline-pin).
+export default function Finale({ onCelebrate }) {
   const reduce = useReducedMotion()
   const [trigger, setTrigger] = useState(0)
 
   const celebrate = useCallback(() => {
     setTrigger((t) => t + 1)
+    onCelebrate?.() // sobe o volume da música (só na 1ª vez; controlado no hook)
     if (reduce) return
 
     const fire = (ratio, opts) =>
@@ -50,65 +49,56 @@ export default function Finale() {
     fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 })
     fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 })
     fire(0.1, { spread: 120, startVelocity: 45, scalar: 0.9 })
-  }, [reduce])
+  }, [reduce, onCelebrate])
 
   return (
-    // -mt-[6vh]: a finale sobe um pouco sobre o fim da timeline (o "lábio"
-    // arredondado + sombra superior fazem ela passar por cima da timeline).
-    <section className="relative z-10 -mt-[6vh]">
-      {/* Camada de fundo PRESA (parallax): fica travada na viewport enquanto
-          o conteúdo rola por cima. Borda superior arredondada + sombra dão o
-          efeito de "deslizar por cima" do conteúdo anterior. */}
-      <div className="finale-sticky-bg overflow-hidden rounded-t-[2.75rem] shadow-[0_-24px_50px_-12px_rgba(0,0,0,0.45)]">
-        <img
-          src={closing.image}
-          alt={closing.alt}
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        {/* Vinheta para o card e o coração permanecerem legíveis */}
-        <div aria-hidden className="vignette absolute inset-0 bg-charcoal/30" />
-      </div>
+    <section className="safe-bottom relative z-20 flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-charcoal px-6 py-24 text-center">
+      {/* Foto de fundo (tela cheia) — sobe por cima da timeline congelada */}
+      <img
+        src={closing.image}
+        alt={closing.alt}
+        loading="lazy"
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      {/* Vinheta para o card e o coração permanecerem legíveis */}
+      <div aria-hidden className="vignette absolute inset-0 bg-charcoal/30" />
 
-      {/* Conteúdo que sobe POR CIMA do fundo preso */}
-      <div className="safe-bottom relative z-10 flex min-h-dvh flex-col items-center justify-center px-6 py-24 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: SOFT_EASE }}
-          viewport={{ once: true, margin: '-80px' }}
-          className="w-full max-w-md rounded-3xl bg-warm-canvas/95 px-7 py-12 shadow-polaroid backdrop-blur-sm"
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: SOFT_EASE }}
+        viewport={{ once: true, margin: '-80px' }}
+        className="relative z-10 w-full max-w-md rounded-3xl bg-warm-canvas/95 px-7 py-12 shadow-polaroid backdrop-blur-sm"
+      >
+        <span className="font-mono text-xs uppercase tracking-meta text-soft-rose">
+          e hoje...
+        </span>
+
+        <p className="mx-auto mt-5 max-w-sm font-sans text-2xl font-bold leading-snug text-charcoal">
+          {renderMessage(closing.message)}
+        </p>
+
+        <motion.button
+          onClick={celebrate}
+          whileTap={{ scale: 0.9 }}
+          aria-label="Mandar amor para a Gabizinha"
+          className="mx-auto mt-10 flex h-16 w-16 items-center justify-center rounded-full bg-soft-rose shadow-lg shadow-soft-rose/40 transition-transform active:scale-95"
         >
-          <span className="font-mono text-xs uppercase tracking-meta text-soft-rose">
-            e hoje...
-          </span>
-
-          <p className="mx-auto mt-5 max-w-sm font-sans text-2xl font-bold leading-snug text-charcoal">
-            {renderMessage(closing.message)}
-          </p>
-
-          <motion.button
-            onClick={celebrate}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Mandar amor para a Gabizinha"
-            className="mx-auto mt-10 flex h-16 w-16 items-center justify-center rounded-full bg-soft-rose shadow-lg shadow-soft-rose/40 transition-transform active:scale-95"
+          <motion.span
+            animate={reduce ? {} : { scale: [1, 1.18, 1] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <motion.span
-              animate={reduce ? {} : { scale: [1, 1.18, 1] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <Heart fill="#fff" strokeWidth={1.5} className="h-7 w-7 text-white" />
-            </motion.span>
-          </motion.button>
+            <Heart fill="#fff" strokeWidth={1.5} className="h-7 w-7 text-white" />
+          </motion.span>
+        </motion.button>
 
-          <p className="mt-4 font-mono text-xs uppercase tracking-meta text-muted-earth">
-            toque no coração 💗
-          </p>
+        <p className="mt-4 font-mono text-xs uppercase tracking-meta text-muted-earth">
+          toque no coração 💗
+        </p>
 
-          <p className="mt-10 font-mono text-sm text-muted-earth">{closing.signature}</p>
-        </motion.div>
-      </div>
+        <p className="mt-10 font-mono text-sm text-muted-earth">{closing.signature}</p>
+      </motion.div>
 
       <FloatingHearts trigger={trigger} />
     </section>
